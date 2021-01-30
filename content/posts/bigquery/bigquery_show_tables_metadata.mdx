@@ -1,0 +1,29 @@
+---
+title: 当日に更新のあったテーブルを知りたい
+date: 2021-01-30
+tags:
+  - "BigQuery"
+---
+
+## 当日に更新されているテーブルを知りたい
+- BigQueryにはテーブルのメタデータが何でも入ってそうなINFORMATION_SCHEMAが存在するが、更新日は入っていない
+- 更新日に関しては__TABLES__に入っているため、以下のようにして抽出できる
+
+```sql
+SELECT
+	*
+FROM
+	dataset_name.__TABLES__
+WHERE
+	DATE(TIMESTAMP_MILLIS(last_modified_time)) = CURRENT_DATE()
+```
+
+- ちなみに、その他で取れるものは以下のようなものとなっている
+  - project_id
+  - dataset_id
+  - table_id
+  - creation_time
+  - last_modified_time
+  - row_count
+  - size_bytes
+  - type
